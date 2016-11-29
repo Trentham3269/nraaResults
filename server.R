@@ -7,18 +7,56 @@ shinyServer(function(input, output) {
   
   results.output <- reactive({
     
-    # subset data frame with user's selections
-    df %>% 
-      select(`Preferred Name`
-             , `Last Name`
-             , Club
-             , State
-             , Info
-             , Score) %>% 
-      filter(df$Year          ==  input$selYear &
-             df$Championship  ==  input$selChampionship &
-             df$Match         ==  input$selMatch &
-             df$Grade         ==  input$selGrade) ->
+    if (input$selView == 'Search individual competitions'){
+    
+      # subset data frame with user's selections
+      df %>% 
+        select(Name
+               , Club
+               , State
+               , Info
+               , Score) %>% 
+        filter(df$Year          ==  input$selYear &
+               df$Championship  ==  input$selChampionship &
+               df$Match         ==  input$selMatch &
+               df$Grade         ==  input$selGrade) ->
+      results
+      
+    } else if (input$selView == 'Search all results by name') { 
+      
+      df %>% 
+        select(Year
+               , Championship
+               , Match
+               , Grade
+               , Place
+               , Score
+               , Name
+               , Club
+               , State
+               , Info) %>% 
+        filter(df$Name == input$selNm) ->
+      results
+      
+    } else {
+    
+      df %>% 
+        select(Year
+               , Championship
+               , Match
+               , Grade
+               , Place
+               , Score
+               , Name
+               , Club
+               , State
+               , Info) %>% 
+        filter(df$Club == input$selClb) ->
+      results
+      
+    }
+    
+    # print object
     results
                
   })
@@ -81,7 +119,6 @@ shinyServer(function(input, output) {
                 , margin = list(t = 80)) %>% 
          config(displayModeBar = F)
          
-    
     # print object
     p
     

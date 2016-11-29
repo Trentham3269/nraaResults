@@ -15,6 +15,7 @@ df <- read_csv("nraaResults.csv")
 df$Score <- as.character(df$Score) #removes issue of grand agg centres 
                                    #being shown as 3 decimal places?
 
+df$Name <- paste(df$`Preferred Name`, " ", df$`Last Name`)
 
 
   
