@@ -1,5 +1,6 @@
 # nraaResults Global
 library(shiny)
+library(DT)
 library(dplyr)
 library(readr)
 library(plotly)
@@ -15,7 +16,7 @@ df <- read_csv("nraaResults.csv")
 df$Score <- as.character(df$Score) #removes issue of grand agg centres 
                                    #being shown as 3 decimal places?
 
-df$Name <- paste(df$`Preferred Name`, " ", df$`Last Name`)
+df$Name <- paste0(df$`Preferred Name`, " ", df$`Last Name`)
 
 
   

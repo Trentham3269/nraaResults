@@ -7,14 +7,17 @@ shinyServer(function(input, output) {
   
   results.output <- reactive({
     
-    if (input$selView == 'Search individual competitions'){
+    if (input$selView == "Search individual competitions"){
     
       # subset data frame with user's selections
       df %>% 
-        select(Name
+        select(Year
+               , Championship
+               , Match
+               , Grade
+               , Name
                , Club
-               , State
-               , Info
+               , Place
                , Score) %>% 
         filter(df$Year          ==  input$selYear &
                df$Championship  ==  input$selChampionship &
@@ -22,35 +25,31 @@ shinyServer(function(input, output) {
                df$Grade         ==  input$selGrade) ->
       results
       
-    } else if (input$selView == 'Search all results by name') { 
+    } else if (input$selView == "Search all results by name") { 
       
       df %>% 
         select(Year
                , Championship
                , Match
                , Grade
-               , Place
-               , Score
                , Name
                , Club
-               , State
-               , Info) %>% 
+               , Place
+               , Score) %>% 
         filter(df$Name == input$selNm) ->
       results
       
-    } else {
+    } else if (input$selView == "Search all results by club") {
     
       df %>% 
         select(Year
                , Championship
                , Match
                , Grade
-               , Place
-               , Score
                , Name
                , Club
-               , State
-               , Info) %>% 
+               , Place
+               , Score) %>% 
         filter(df$Club == input$selClb) ->
       results
       
@@ -61,39 +60,6 @@ shinyServer(function(input, output) {
                
   })
   
-#__________________________________________________________________________________________________#
-
-  entrants.output <- reactive({
-    
-    # grade order
-    grade.order <- c("Target Rifle - A","Target Rifle - B","Target Rifle - C","F Standard - A"
-                     ,"F Standard - B","F Open - FO","F/TR - A")
-    
-    # calculate data for entrants plot
-    df %>%
-      select(everything()) %>% 
-      group_by(Year
-               , Championship
-               , Match
-               , Grade) %>%
-      summarise(Entrants = n()) %>% 
-      slice(match(grade.order, Grade)) ->
-    table
-    
-    # subset by user's selections
-    table <- subset(table, 
-                    table$Year         == input$selYear &
-                    table$Championship == input$selChampionship &
-                    table$Match        == input$selMatch)
-    
-    # abbreviate names and match with grade.order 
-    table$Grade <- c("TR-A", "TR-B", "TR-C", "FS-A", "FS-B", "FO", "F/TR")
-    
-    # print object
-    table
-                      
-  })
-  
 ####################################################################################################
   
   # Outputs ####
@@ -102,28 +68,41 @@ shinyServer(function(input, output) {
   
     results.output()
   
-  }, options = list(paging = FALSE))
+  }, options = list(paging = FALSE
+                    , autoWidth = TRUE
+                    , columnDefs = list(list(width = '125px', targets = c(3,4,5,6))))
+  )
   
-#__________________________________________________________________________________________________#
-
-  output$entrants <- renderPlotly({
+####################################################################################################
+  
+  # Download ####
+  
+  # Switch for download's filename
+  dwnld.nm <- reactive({
     
-    x.order <- list("TR-A", "TR-B", "TR-C", "FS-A", "FS-B", "FO", "F/TR")
-  
-    p <- plot_ly(entrants.output()
-                , x = ~Grade
-                , y = ~Entrants
-                , type = "bar") %>%
-         layout(title = "Count of Entrants by Grade"
-                , xaxis = list(title = "", categoryorder = "array", categoryarray = x.order)
-                , margin = list(t = 80)) %>% 
-         config(displayModeBar = F)
-         
-    # print object
-    p
+    switch(input$selView
+    , "Search all results by name"     = input$selNm
+    , "Search all results by club"     = input$selClb
+    , "Search individual competitions" = paste0(input$selYear, " ", input$selChampionship, " "
+                                                , input$selMatch, " ", input$selGrade)
+    )
     
   })
   
-####################################################################################################
+#__________________________________________________________________________________________________#
+  
+  # Download handler
+  output$download <- downloadHandler(
+    
+    filename = function() {
+      paste0(dwnld.nm()," Results.csv")
+    }, 
+    content = function(file) {
+      write_csv(results.output(), file)
+    }
+  
+  )
+
+####################################################################################################  
 
 }) 

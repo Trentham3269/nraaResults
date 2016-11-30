@@ -1,7 +1,7 @@
 # nraaResults UI
 shinyUI( 
-  fluidPage(theme = "bootswatch-v3.3.7-spacelab"
-    , titlePanel(h2("National Rifle Association of Australia"))
+  fluidPage(
+    titlePanel(h2("National Rifle Association of Australia"))
     , titlePanel(h3("Target Rifle and F-Class Queens Prize Results"))
     , br()
     , sidebarLayout(
@@ -12,6 +12,7 @@ shinyUI(
                        , choices = c("Search all results by name"
                                      , "Search all results by club"
                                      , "Search individual competitions"))
+        , br()
         , conditionalPanel(condition = "input.selView == 'Search individual competitions'"
           , selectInput(inputId = "selYear"
                         , label = "Calendar Year:"
@@ -26,17 +27,23 @@ shinyUI(
                         , label = "Grade:"
                         , choices = c("Target Rifle - A","Target Rifle - B","Target Rifle - C",
                                       "F Standard - A","F Standard - B","F Open - FO", "F/TR - A"))
-        ),
-        conditionalPanel(condition = "input.selView == 'Search all results by name'"
+        )
+        , br()
+        , conditionalPanel(condition = "input.selView == 'Search all results by name'"
           , selectInput(inputId = "selNm"
                         , label = "Choose Name:"
-                        , choices = sort(unique(df$Name)))
-        ),
-        conditionalPanel(condition = "input.selView == 'Search all results by club'"
+                        , choices = c("Select name from list", sort(unique(df$Name))))
+        )
+        , br()
+        , conditionalPanel(condition = "input.selView == 'Search all results by club'"
           , selectInput(inputId = "selClb"
                         , label = "Choose Club:"
-                        , choices = sort(unique(df$Club)))
+                        , choices = c("Select club from list", sort(unique(df$Club))))
         )
+        , br()
+        , downloadButton(outputId = "download"
+                       , label = "Download Data"
+                       , class = "btn-primary")
       ), 
         
       # data table
