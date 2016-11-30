@@ -56,7 +56,7 @@ scores %>%
          , Score)%>%
   mutate(Year = as.character(readline("Enter year:"))) %>%
   mutate(Championship = readline("Enter Association eg. NRAA:")) %>%
-  mutate(Match = readline("Enter LEADUP, QUEENS or GRAND AGGREGATE:")) %>%
+  mutate(Match = readline("Enter Leadup, Queens or Grand:")) %>%
   select(Year
          , Championship
          , Match

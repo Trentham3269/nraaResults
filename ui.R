@@ -22,7 +22,7 @@ shinyUI(
                         , choices = c("TRA","VRA","SARA","NQRA","NTRA","NRAA","QRA","NSWRA","ACT"))
           , selectInput(inputId = "selMatch"
                         , label = "Match:" 
-                        , choices = c("LEADUP","QUEENS","GRAND AGGREGATE"))
+                        , choices = c("Leadup","Queens","Grand"))
           , selectInput(inputId = "selGrade"
                         , label = "Grade:"
                         , choices = c("Target Rifle - A","Target Rifle - B","Target Rifle - C",
