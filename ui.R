@@ -19,7 +19,7 @@ shinyUI(
                         , choices = levels(factor(df$Year)))
           , selectInput(inputId = "selChampionship"
                         , label = "Championship (in annual date order):"
-                        , choices = c("TRA","VRA","SARA","NQRA","NTRA","NRAA","QRA","NSWRA","ACT"))
+                        , choices = c("TRA","VRA","SARA","NQRA","NTRA","NRAA","QRA","NSWRA","ACTRA"))
           , selectInput(inputId = "selMatch"
                         , label = "Match:" 
                         , choices = c("Leadup","Queens","Grand"))

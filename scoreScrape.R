@@ -2,12 +2,12 @@ library(rvest)
 library(dplyr)
 library(readr)
 
-url <- "http://www.nraa.com.au/nraa-national-championships-2016-results/"
+url <- "https://www.nraa.com.au/the-canberra-queens-prize-2016-act-results/"
 
 # scrape scores as list
 scores_scrape <- url %>%
   read_html() %>%
-  html_nodes(xpath = '/html/body/div[1]/div[2]/div[3]/table') %>%
+  html_nodes(xpath = '/html/body/div[1]/div[2]/div[15]/table') %>%
   html_table(fill = T)
 
 # return the only list element as data frame
