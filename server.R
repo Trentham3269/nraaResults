@@ -83,10 +83,10 @@ shinyServer(function(input, output) {
     switch(input$selView
     , "Search all results by name"     = input$selNm
     , "Search all results by club"     = input$selClb
-    , "Search individual competitions" = paste0(input$selYear, " ", input$selChampionship, " "
-                                                , input$selMatch, " ", input$selGrade)
+    , "Search individual competitions" = paste(input$selYear, input$selChampionship
+                                               , input$selMatch, input$selGrade, sep = "_")
     )
-    
+
   })
   
 #__________________________________________________________________________________________________#
@@ -95,7 +95,7 @@ shinyServer(function(input, output) {
   output$download <- downloadHandler(
     
     filename = function() {
-      paste0(dwnld.nm()," Results.csv")
+      paste0(dwnld.nm(),"_Results.csv")
     }, 
     content = function(file) {
       write_csv(results.output(), file)
