@@ -4,8 +4,8 @@ shinyUI(
     # include Google Analytics
     tags$head(includeScript("www/google-analytics.js"))
     
-    , titlePanel(h2("National Rifle Association of Australia"))
-    , titlePanel(h3("Target Rifle and F-Class Queens Prize Results"))
+    , h2(titlePanel("National Rifle Association of Australia"))
+    , h3(titlePanel("Target Rifle and F-Class Queens Prize Results"))
     , br()
     , sidebarLayout(
       # sidebar ui inputs
