@@ -1,7 +1,10 @@
 # nraaResults UI
 shinyUI( 
   fluidPage(
-    titlePanel(h2("National Rifle Association of Australia"))
+    # include Google Analytics
+    tags$head(includeScript("www/google-analytics.js"))
+    
+    , titlePanel(h2("National Rifle Association of Australia"))
     , titlePanel(h3("Target Rifle and F-Class Queens Prize Results"))
     , br()
     , sidebarLayout(
