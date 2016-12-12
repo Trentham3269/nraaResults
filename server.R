@@ -7,10 +7,21 @@ shinyServer(function(input, output) {
   
   results.output <- reactive({
     
-    if (input$selView == "Search individual competitions"){
+    if (input$selView == "Queens Prize Honour Board"){
+      
+      # group historical results by winner
+      df %>%
+        select(everything()) %>% 
+        filter(Winner != 'NA') %>%
+        group_by(Winner) %>%
+        summarise(`Queens Prize Count` = n()) %>%
+        arrange(desc(`Queens Prize Count`)) ->
+      results
+      
+    } else if (input$selView == "Search individual competitions from 2014 onwards"){
     
       # subset data frame with user's selections
-      df %>% 
+      df2 %>% 
         select(Year
                , Championship
                , Match
@@ -19,15 +30,15 @@ shinyServer(function(input, output) {
                , Club
                , Place
                , Score) %>% 
-        filter(df$Year          ==  input$selYear &
-               df$Championship  ==  input$selChampionship &
-               df$Match         ==  input$selMatch &
-               df$Grade         ==  input$selGrade) ->
+        filter(df2$Year          ==  input$selYear &
+               df2$Championship  ==  input$selChampionship &
+               df2$Match         ==  input$selMatch &
+               df2$Grade         ==  input$selGrade) ->
       results
       
-    } else if (input$selView == "Search all results by name") { 
+    } else if (input$selView == "Search results from 2014 onwards by name") { 
       
-      df %>% 
+      df2 %>% 
         select(Year
                , Championship
                , Match
@@ -36,12 +47,12 @@ shinyServer(function(input, output) {
                , Club
                , Place
                , Score) %>% 
-        filter(df$Name == input$selNm) ->
+        filter(df2$Name == input$selNm) ->
       results
       
-    } else if (input$selView == "Search all results by club") {
+    } else if (input$selView == "Search results from 2014 onwards by club") {
     
-      df %>% 
+      df2 %>% 
         select(Year
                , Championship
                , Match
@@ -50,10 +61,10 @@ shinyServer(function(input, output) {
                , Club
                , Place
                , Score) %>% 
-        filter(df$Club == input$selClb) ->
+        filter(df2$Club == input$selClb) ->
       results
       
-    }
+    } 
     
     # print object
     results
@@ -69,9 +80,9 @@ shinyServer(function(input, output) {
     results.output()
   
   }, options = list(paging = FALSE
-                    , autoWidth = TRUE
-                    , columnDefs = list(list(width = '125px', targets = c(3,4,5,6))))
-  )
+                    , columnDefs = list(list(className = 'dt-center', targets = c("_all")))))
+  
+  
   
 ####################################################################################################
   
@@ -81,10 +92,11 @@ shinyServer(function(input, output) {
   dwnld.nm <- reactive({
     
     switch(input$selView
-    , "Search all results by name"     = input$selNm
-    , "Search all results by club"     = input$selClb
-    , "Search individual competitions" = paste(input$selYear, input$selChampionship
-                                               , input$selMatch, input$selGrade, sep = "_")
+    , "Queens Prize Honour Board"                        = "Queens_Prize_Honour_Board"
+    , "Search results from 2014 onwards by name"         = input$selNm
+    , "Search results from 2014 onwards by club"         = input$selClb
+    , "Search individual competitions from 2014 onwards" = paste(input$selYear, input$selChampionship
+                                                                 , input$selMatch, input$selGrade, sep = "_")
     )
 
   })

@@ -9,17 +9,19 @@ shinyUI(
     , br()
     , sidebarLayout(
       # sidebar ui inputs
-      sidebarPanel(width = 3
+      sidebarPanel(width = 4
         , radioButtons(inputId = "selView"
                        , label = "Choose view:"
-                       , choices = c("Search all results by name"
-                                     , "Search all results by club"
-                                     , "Search individual competitions"))
+                       , choices = c("Queens Prize Honour Board"
+                                     , "Search results from 2014 onwards by name"
+                                     , "Search results from 2014 onwards by club"
+                                     , "Search individual competitions from 2014 onwards")
+                       , selected = "Queens Prize Honour Board")
         , br()
-        , conditionalPanel(condition = "input.selView == 'Search individual competitions'"
+        , conditionalPanel(condition = "input.selView == 'Search individual competitions from 2014 onwards'"
           , selectInput(inputId = "selYear"
                         , label = "Calendar Year:"
-                        , choices = levels(factor(df$Year)))
+                        , choices = levels(factor(df2$Year)))
           , selectInput(inputId = "selChampionship"
                         , label = "Championship (in annual date order):"
                         , choices = c("TRA","VRA","SARA","NQRA","NTRA","NRAA","QRA","NSWRA","ACTRA"))
@@ -31,17 +33,15 @@ shinyUI(
                         , choices = c("Target Rifle - A","Target Rifle - B","Target Rifle - C",
                                       "F Standard - A","F Standard - B","F Open - FO", "F/TR - A"))
         )
-        , br()
-        , conditionalPanel(condition = "input.selView == 'Search all results by name'"
+        , conditionalPanel(condition = "input.selView == 'Search results from 2014 onwards by name'"
           , selectInput(inputId = "selNm"
                         , label = "Choose Name:"
-                        , choices = c("Select name from list", sort(unique(df$Name))))
+                        , choices = c("Select name from list", sort(unique(df2$Name))))
         )
-        , br()
-        , conditionalPanel(condition = "input.selView == 'Search all results by club'"
+        , conditionalPanel(condition = "input.selView == 'Search results from 2014 onwards by club'"
           , selectInput(inputId = "selClb"
                         , label = "Choose Club:"
-                        , choices = c("Select club from list", sort(unique(df$Club))))
+                        , choices = c("Select club from list", sort(unique(df2$Club))))
         )
         , br()
         , downloadButton(outputId = "download"

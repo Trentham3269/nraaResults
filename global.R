@@ -5,11 +5,19 @@ library(dplyr)
 library(readr)
 library(stringr)
 
-# Import csv file 
-df <- read_csv("data/nraaResults.csv", col_types = str_dup("c", 11))
+# Import csv files
+df <- read_csv("data/nraaHistorical.csv")
+df2 <- read_csv("data/nraaResults.csv", col_types = str_dup("c", 11))
 
 # Concatenate name column
-df$Name <- paste0(df$`Preferred Name`, " ", df$`Last Name`)
+df2$Name <- paste0(df2$`Preferred Name`, " ", df2$`Last Name`)
+
+
+
+
+
+  
+  
 
 
   
