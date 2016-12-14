@@ -27,8 +27,8 @@ shinyServer(function(input, output) {
           select(Year
                  , Winner
                  , `Kings/Queens Prize` = State) %>% 
-          filter(Winner != 'NA') %>%
-          filter(df$Winner == input$selHnrBrdNm) %>% 
+          filter(Winner != 'NA' &
+                 Winner == input$selHnrBrdNm) %>%
           arrange(desc(Year)) ->
         results
         
