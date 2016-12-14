@@ -7,16 +7,32 @@ shinyServer(function(input, output) {
   
   results.output <- reactive({
     
-    if (input$selView == "Queens Prize Honour Board"){
+    if (input$selView == "Kings/Queens Prize Honour Board"){
+    
+      if (input$selHnrBrdNm == "Select name from list"){
       
-      # group historical results by winner
-      df %>%
-        select(everything()) %>% 
-        filter(Winner != 'NA') %>%
-        group_by(Winner) %>%
-        summarise(`Queens Prize Count` = n()) %>%
-        arrange(desc(`Queens Prize Count`)) ->
-      results
+        # group historical results by winner
+        df %>%
+          select(everything()) %>% 
+          filter(Winner != 'NA') %>%
+          group_by(Winner) %>%
+          summarise(`Kings/Queens Prize Count` = n()) %>%
+          arrange(desc(`Kings/Queens Prize Count`)) ->
+        results
+        
+      } else {
+        
+        # subset data frame with user's selections
+        df %>% 
+          select(Year
+                 , Winner
+                 , `Kings/Queens Prize` = State) %>% 
+          filter(Winner != 'NA') %>%
+          filter(df$Winner == input$selHnrBrdNm) %>% 
+          arrange(desc(Year)) ->
+        results
+        
+      }
       
     } else if (input$selView == "Search individual competitions from 2014 onwards"){
     
