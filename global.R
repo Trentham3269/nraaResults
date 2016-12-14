@@ -4,6 +4,7 @@ library(DT)
 library(dplyr)
 library(readr)
 library(stringr)
+library(plotly)
 
 # Import csv files
 df <- read_csv("data/nraaHistorical.csv")

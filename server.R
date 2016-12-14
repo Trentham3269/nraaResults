@@ -90,7 +90,8 @@ shinyServer(function(input, output) {
 ####################################################################################################
   
   # Outputs ####
-   
+  
+  # data table
   output$results <- renderDataTable({
   
     results.output()
@@ -98,7 +99,32 @@ shinyServer(function(input, output) {
   }, options = list(paging = FALSE
                     , columnDefs = list(list(className = 'dt-center', targets = c("_all")))))
   
+#__________________________________________________________________________________________________#
   
+  # plot
+  output$plot <- renderPlotly({
+    
+    if (input$selView == "Kings/Queens Prize Honour Board" &
+        input$selHnrBrdNm != "Select name from list") {
+        # nrow(results.output()) > 1){
+    
+      p <- plot_ly(results.output(), x = ~`Kings/Queens Prize`, type = "histogram", text = ~Year) %>%
+           layout(title = paste0(input$selHnrBrdNm, " - Wins by Location")
+                  , xaxis = list(title = "")
+                  , yaxis = list(dtick = 1)
+                  , margin = list(l = 20, t = 40, r = 20, b = 50)) %>%
+           config(displaymodebar = FALSE)
+      
+    } else {
+      
+      p <- plotly_empty()
+      
+    }
+    
+    # print object
+    p
+  
+  })
   
 ####################################################################################################
   
