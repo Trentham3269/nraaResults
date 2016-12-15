@@ -43,12 +43,15 @@ shinyUI(
                      , label = "Grade:"
                      , choices = c("Target Rifle - A","Target Rifle - B","Target Rifle - C",
                                    "F Standard - A","F Standard - B","F Open - FO", "F/TR - A"))),
+        br(),
         downloadButton(outputId = "download"
                        , label = "Download Data"
                        , class = "btn-primary"),
         br(),
         br(),
-        plotlyOutput("plot", width = "100%", height = "300px")
+        conditionalPanel(condition = "input.selView == 'Kings/Queens Prize Honour Board'",
+          br(),
+          plotlyOutput("plot", width = "100%", height = "300px"))
         ),
       
       # data table

@@ -104,42 +104,43 @@ shinyServer(function(input, output) {
   # plot
   output$plot <- renderPlotly({
     
-    if (input$selView == "Kings/Queens Prize Honour Board" &
-        input$selHnrBrdNm == "Select name from list"){
+    if (input$selView == "Kings/Queens Prize Honour Board") {
+        
+      if (input$selHnrBrdNm == "Select name from list"){
       
-      # top 10 by Kings/Queens Prize Count
-      results.output() %>% 
-        top_n(n = 10) ->
-      results.top
+        # top 10 by Kings/Queens Prize Count
+        results.output() %>% 
+          top_n(n = 10) ->
+        results.top
+        
+        # get order for x axis
+        x.order <- list(results.top$Winner)
+        
+        # plot
+        p <- plot_ly(results.top, x = ~Winner, y=~`Kings/Queens Prize Count`, type = "bar") %>%
+             layout(title = paste0("Top 10 Kings/Queens Winners")
+                    , xaxis = list(title = "", categoryorder = "array", categoryarray = x.order)
+                    , yaxis = list(title = "")
+                    , margin = list(l = 20, t = 40, r = 35, b = 55)) %>%
+             config(displaymodebar = FALSE)
       
-      # get order for x axis
-      x.order <- list(results.top$Winner)
+      } else if (input$selHnrBrdNm != "Select name from list") {
       
-      # plot
-      p <- plot_ly(results.top, x = ~Winner, y=~`Kings/Queens Prize Count`, type = "bar") %>%
-           layout(title = paste0("Top 10 Kings/Queens Winners")
-                  , xaxis = list(title = "", categoryorder = "array", categoryarray = x.order)
-                  , yaxis = list(title = "")
-                  , margin = list(l = 20, t = 40, r = 35, b = 55)) %>%
-           config(displaymodebar = FALSE)
+        # plot
+        p <- plot_ly(results.output(), x = ~`Kings/Queens Prize`, type = "histogram") %>%
+             layout(title = paste0(input$selHnrBrdNm, " - Wins by Location")
+                    , xaxis = list(title = "")
+                    , yaxis = list(dtick = 1)
+                    , margin = list(l = 20, t = 40, r = 20, b = 50)) %>%
+             config(displaymodebar = FALSE)
+        
+        } 
       
+      } else {
       
-    } else if (input$selView == "Kings/Queens Prize Honour Board" &
-               input$selHnrBrdNm != "Select name from list") {
+        p <- plotly_empty()
       
-      # plot
-      p <- plot_ly(results.output(), x = ~`Kings/Queens Prize`, type = "histogram") %>%
-           layout(title = paste0(input$selHnrBrdNm, " - Wins by Location")
-                  , xaxis = list(title = "")
-                  , yaxis = list(dtick = 1)
-                  , margin = list(l = 20, t = 40, r = 20, b = 50)) %>%
-           config(displaymodebar = FALSE)
-      
-    } else {
-      
-      p <- plotly_empty()
-      
-    }
+      }
     
     # print object
     p
