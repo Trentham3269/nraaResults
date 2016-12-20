@@ -121,7 +121,7 @@ shinyServer(function(input, output) {
              layout(title = paste0("Top 10 Kings/Queens Winners")
                     , xaxis = list(title = "", categoryorder = "array", categoryarray = x.order)
                     , yaxis = list(title = "")
-                    , margin = list(l = 20, t = 40, r = 35, b = 55)) %>%
+                    , margin = list(l = 20, t = 40, r = 40, b = 55)) %>%
              config(displaymodebar = FALSE)
       
       } else if (input$selHnrBrdNm != "Select name from list") {
